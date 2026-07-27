@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}My Reminders — AgentCare{% endblock %}
+{% block content %}
+<h1>My Reminders &amp; Follow-ups</h1>
+<div class="card">
+  {% if reminders %}
+  <table>
+    <tr><th>Type</th><th>Scheduled</th><th>Status</th><th>Notes</th></tr>
+    {% for r in reminders %}
+    <tr>
+      <td>{{ r.reminder_type }}</td>
+      <td>{{ r.scheduled_at.strftime('%Y-%m-%d %H:%M') }}</td>
+      <td><span class="badge {{ r.status.value }}">{{ r.status.value }}</span></td>
+      <td class="muted">{{ r.notes or '—' }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <p class="muted">No reminders yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

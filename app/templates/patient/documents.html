@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}My Documents — AgentCare{% endblock %}
+{% block content %}
+<h1>My Documents</h1>
+<div class="card">
+  {% if documents %}
+  <table>
+    <tr><th>Type</th><th>Uploaded</th><th>Duplicate?</th><th>Checksum</th></tr>
+    {% for d in documents %}
+    <tr>
+      <td>{{ d.document_type }}</td>
+      <td>{{ d.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+      <td>{% if d.is_duplicate %}<span class="badge escalated">duplicate</span>{% else %}—{% endif %}</td>
+      <td class="muted">{{ d.checksum[:12] }}...</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <p class="muted">No documents uploaded yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}My Profile — AgentCare{% endblock %}
+{% block content %}
+<h1>My Profile</h1>
+<div class="card" style="max-width:480px;">
+  {% if saved %}<p style="color:#065f46;">Profile updated.</p>{% endif %}
+  <form method="post" action="/patient/profile">
+    <label>Phone</label>
+    <input type="text" name="phone" value="{{ user.patient_profile.phone or '' }}">
+    <label>Date of birth</label>
+    <input type="date" name="date_of_birth" value="{{ user.patient_profile.date_of_birth or '' }}">
+    <label>Preferred language</label>
+    <input type="text" name="preferred_language" value="{{ user.patient_profile.preferred_language or 'en' }}">
+    <label>Emergency contact</label>
+    <input type="text" name="emergency_contact" value="{{ user.patient_profile.emergency_contact or '' }}">
+    <button type="submit">Save</button>
+  </form>
+</div>
+{% endblock %}

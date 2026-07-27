@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}AgentCare{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<nav>
+  <div>
+    <a href="/"><strong>AgentCare</strong></a>
+    {% if user %}
+      {% if user.role.value == 'patient' %}
+        <a href="/patient">Dashboard</a>
+        <a href="/patient/request">New Request</a>
+        <a href="/patient/appointments">Appointments</a>
+        <a href="/patient/documents">Documents</a>
+        <a href="/patient/reminders">Reminders</a>
+        <a href="/patient/profile">Profile</a>
+      {% else %}
+        <a href="/staff">Dashboard</a>
+        <a href="/staff/escalations">Escalations</a>
+        <a href="/staff/departments">Departments</a>
+        <a href="/staff/audit">Audit Log</a>
+      {% endif %}
+    {% endif %}
+  </div>
+  <div>
+    {% if user %}
+      <span class="muted" style="color:#d1fae5;">{{ user.name }} ({{ user.role.value }})</span>
+      <a href="/logout">Logout</a>
+    {% else %}
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    {% endif %}
+  </div>
+</nav>
+<div class="container">
+  {% block content %}{% endblock %}
+</div>
+</body>
+</html>

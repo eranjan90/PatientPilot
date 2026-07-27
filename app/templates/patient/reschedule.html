@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Reschedule Appointment — AgentCare{% endblock %}
+{% block content %}
+<h1>Reschedule appointment #{{ appointment.id }}</h1>
+<div class="card">
+  <p class="muted">Current time: {{ appointment.slot.start_time.strftime('%Y-%m-%d %H:%M') }} with {{ appointment.doctor.name }}</p>
+  {% if slots %}
+  <form method="post" action="/patient/appointments/{{ appointment.id }}/reschedule">
+    <label>New time</label>
+    <select name="new_slot_id" required>
+      {% for s in slots %}
+      <option value="{{ s.slot_id }}">{{ s.start_time }} — {{ s.doctor_name }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit">Confirm new time</button>
+  </form>
+  {% else %}
+  <p class="muted">No available slots right now for this department.</p>
+  {% endif %}
+</div>
+<a href="/patient/appointments">&larr; Back to appointments</a>
+{% endblock %}

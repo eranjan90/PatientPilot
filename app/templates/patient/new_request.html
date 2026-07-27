@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}New Request — AgentCare{% endblock %}
+{% block content %}
+<div class="card">
+  <h2>Submit an administrative request</h2>
+  <p class="muted">Example: "I need a cardiology follow-up next week and want to attach my old ECG." AgentCare will identify your record, route the request, find a slot, book it, and process any attached documents — all administrative, never clinical.</p>
+  <form method="post" action="/patient/request" enctype="multipart/form-data">
+    <label>What do you need?</label>
+    <textarea name="message" rows="4" required placeholder="Describe your request..."></textarea>
+    <label>Attach documents (optional)</label>
+    <input type="file" name="files" multiple>
+    <button type="submit">Submit request</button>
+  </form>
+</div>
+{% endblock %}

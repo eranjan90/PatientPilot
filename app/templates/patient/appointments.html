@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}My Appointments — AgentCare{% endblock %}
+{% block content %}
+<h1>My Appointments</h1>
+<div class="card">
+  {% if appointments %}
+  <table>
+    <tr><th>Doctor</th><th>Department</th><th>When</th><th>Status</th><th></th></tr>
+    {% for a in appointments %}
+    <tr>
+      <td>{{ a.doctor.name }}</td>
+      <td>{{ a.doctor.department.name }}</td>
+      <td>{{ a.slot.start_time.strftime('%Y-%m-%d %H:%M') }}</td>
+      <td><span class="badge {{ a.status.value }}">{{ a.status.value }}</span></td>
+      <td>
+        {% if a.status.value in ['confirmed','pending','rescheduled'] %}
+        <a href="/patient/appointments/{{ a.id }}/reschedule"><button type="button" class="secondary">Reschedule</button></a>
+        <form class="inline" method="post" action="/patient/appointments/{{ a.id }}/cancel" onsubmit="return confirm('Cancel this appointment?');">
+          <button type="submit" class="danger">Cancel</button>
+        </form>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <p class="muted">No appointments yet. <a href="/patient/request">Submit a request</a> to book one.</p>
+  {% endif %}
+</div>
+{% endblock %}

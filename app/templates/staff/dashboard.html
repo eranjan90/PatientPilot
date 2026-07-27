@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Staff Dashboard — AgentCare{% endblock %}
+{% block content %}
+<h1>Staff Dashboard</h1>
+
+{% if pending_escalations %}
+<div class="card" style="border-left:4px solid #b91c1c;">
+  <h3>{{ pending_escalations|length }} pending escalation(s)</h3>
+  <p><a href="/staff/escalations">Review now &rarr;</a></p>
+</div>
+{% endif %}
+
+<div class="card">
+  <h2>All patient requests</h2>
+  <table>
+    <tr><th>ID</th><th>Patient ID</th><th>Step</th><th>Status</th><th>Submitted</th><th></th></tr>
+    {% for r in runs %}
+    <tr>
+      <td>#{{ r.id }}</td>
+      <td>{{ r.patient_id }}</td>
+      <td>{{ r.current_step }}</td>
+      <td><span class="badge {{ r.status.value }}">{{ r.status.value }}</span></td>
+      <td>{{ r.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+      <td><a href="/staff/workflow/{{ r.id }}">View</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

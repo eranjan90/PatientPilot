@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Request #{{ run.id }} — Staff{% endblock %}
+{% block content %}
+<h1>Request #{{ run.id }}</h1>
+<p><span class="badge {{ run.status.value }}">{{ run.status.value }}</span> — step: {{ run.current_step }} — patient #{{ run.patient_id }}
+  (<a href="/staff/patients/{{ run.patient_id }}">view patient</a>)</p>
+
+<div class="card">
+  <h3>Original request</h3>
+  <p>{{ run.original_request }}</p>
+</div>
+
+{% if escalation %}
+<div class="card" style="border-left:4px solid #b91c1c;">
+  <h3>Escalation</h3>
+  <p><strong>Reason:</strong> {{ escalation.reason }}</p>
+  <p><strong>Severity:</strong> {{ escalation.severity }}</p>
+  <p><span class="badge {{ escalation.status.value }}">{{ escalation.status.value }}</span></p>
+  {% if escalation.status.value == 'pending' %}
+  <form method="post" action="/staff/escalations/{{ escalation.id }}/approve">
+    <label>Review notes</label>
+    <textarea name="notes" rows="2"></textarea>
+    <button type="submit">Approve &amp; resume workflow</button>
+  </form>
+  <form method="post" action="/staff/escalations/{{ escalation.id }}/reject">
+    <textarea name="notes" rows="2" placeholder="Rejection notes"></textarea>
+    <button type="submit" class="danger">Reject</button>
+  </form>
+  {% endif %}
+</div>
+{% endif %}
+
+<div class="card">
+  <h3>Full workflow state (raw)</h3>
+  <pre style="white-space:pre-wrap;font-size:12px;background:#f9fafb;padding:12px;border-radius:6px;">{{ state | tojson(indent=2) }}</pre>
+</div>
+<a href="/staff">&larr; Back to dashboard</a>
+{% endblock %}

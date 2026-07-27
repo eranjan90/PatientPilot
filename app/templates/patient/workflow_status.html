@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Request #{{ run.id }} — AgentCare{% endblock %}
+{% block content %}
+<h1>Request #{{ run.id }}</h1>
+<p><span class="badge {{ run.status.value }}">{{ run.status.value }}</span> — last step: <strong>{{ run.current_step }}</strong></p>
+
+<div class="card">
+  <h3>Your request</h3>
+  <p>{{ run.original_request }}</p>
+</div>
+
+{% if escalation %}
+<div class="card" style="border-left:4px solid #b91c1c;">
+  <h3>Escalated to staff for review</h3>
+  <p><strong>Reason:</strong> {{ escalation.reason }}</p>
+  <p><strong>Severity:</strong> {{ escalation.severity }}</p>
+  <p><span class="badge {{ escalation.status.value }}">{{ escalation.status.value }}</span></p>
+  <p class="muted">A staff member must review this before AgentCare can proceed further.</p>
+</div>
+{% endif %}
+
+{% if state.intent %}
+<div class="card">
+  <h3>Understood intent</h3>
+  <p>{{ state.intent.notes }}</p>
+</div>
+{% endif %}
+
+{% if state.routing %}
+<div class="card">
+  <h3>Department routing</h3>
+  {% if state.routing.routed %}
+  <p>Routed to <strong>{{ state.routing.name }}</strong>.</p>
+  {% else %}
+  <p>Could not confidently route — escalated. {{ state.routing.reason }}</p>
+  {% endif %}
+</div>
+{% endif %}
+
+{% if state.appointment %}
+<div class="card">
+  <h3>Appointment</h3>
+  {% if state.appointment.booked %}
+  <p>Confirmed with <strong>{{ state.appointment.doctor_name }}</strong> at {{ state.appointment.start_time }}.</p>
+  {% else %}
+  <p class="muted">No appointment booked: {{ state.appointment.error }}</p>
+  {% endif %}
+</div>
+{% endif %}
+
+{% if state.documents %}
+<div class="card">
+  <h3>Documents</h3>
+  <p>{{ state.documents.summary }}</p>
+  {% if state.documents.missing %}
+  <p><strong>Missing:</strong> {{ state.documents.missing | join(', ') }}</p>
+  {% endif %}
+  {% if state.documents.present %}
+  <p><strong>On file:</strong> {{ state.documents.present | join(', ') }}</p>
+  {% endif %}
+</div>
+{% endif %}
+
+{% if state.followup %}
+<div class="card">
+  <h3>Reminders &amp; follow-up</h3>
+  <p>{{ state.followup.summary }}</p>
+</div>
+{% endif %}
+
+<a href="/patient">&larr; Back to dashboard</a>
+{% endblock %}

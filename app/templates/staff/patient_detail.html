@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Patient #{{ patient.id }} — AgentCare{% endblock %}
+{% block content %}
+<h1>Patient #{{ patient.id }} — {{ patient.user.name }}</h1>
+<p class="muted">{{ patient.user.email }} · {{ patient.phone or 'no phone on file' }}</p>
+
+<div class="card">
+  <h3>Workflow history</h3>
+  {% if runs %}
+  <table>
+    <tr><th>ID</th><th>Step</th><th>Status</th><th>Submitted</th><th></th></tr>
+    {% for r in runs %}
+    <tr>
+      <td>#{{ r.id }}</td>
+      <td>{{ r.current_step }}</td>
+      <td><span class="badge {{ r.status.value }}">{{ r.status.value }}</span></td>
+      <td>{{ r.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+      <td><a href="/staff/workflow/{{ r.id }}">View</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}<p class="muted">No workflow runs yet.</p>{% endif %}
+</div>
+<a href="/staff">&larr; Back to dashboard</a>
+{% endblock %}

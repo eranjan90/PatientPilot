@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Departments — AgentCare{% endblock %}
+{% block content %}
+<h1>Departments &amp; Doctors</h1>
+
+<div class="card">
+  <table>
+    <tr><th>Department</th><th>Required documents</th><th>Doctors</th></tr>
+    {% for d in departments %}
+    <tr>
+      <td>{{ d.name }}</td>
+      <td class="muted">{{ d.required_documents or '—' }}</td>
+      <td>
+        {% for doc in doctors if doc.department_id == d.id %}
+          {{ doc.name }}{% if not loop.last %}, {% endif %}
+        {% endfor %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+
+<div class="grid">
+  <div class="card">
+    <h3>Add a department</h3>
+    <form method="post" action="/staff/departments/add">
+      <label>Name</label>
+      <input type="text" name="name" required>
+      <label>Description</label>
+      <input type="text" name="description">
+      <label>Required documents (comma-separated)</label>
+      <input type="text" name="required_documents" placeholder="ecg,blood_report">
+      <button type="submit">Add department</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h3>Add a doctor</h3>
+    <form method="post" id="add-doctor-form" action="/staff/departments/0/add_doctor">
+      <label>Department</label>
+      <select name="department_id_display" required onchange="document.getElementById('add-doctor-form').action = '/staff/departments/' + this.value + '/add_doctor';">
+        <option value="" disabled selected>Select a department</option>
+        {% for d in departments %}
+        <option value="{{ d.id }}">{{ d.name }}</option>
+        {% endfor %}
+      </select>
+      <label>Doctor name</label>
+      <input type="text" name="name" required placeholder="Dr. Jane Smith">
+      <button type="submit">Add doctor</button>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Add a slot for a doctor</h3>
+  <form id="add-slot-form" method="post" action="/staff/doctors/0/add_slot">
+    <label>Doctor</label>
+    <select name="doctor_id_display" id="doctor_id_display" required onchange="document.getElementById('add-slot-form').action = '/staff/doctors/' + this.value + '/add_slot';">
+      <option value="" disabled selected>Select a doctor</option>
+      {% for doc in doctors %}
+      <option value="{{ doc.id }}">{{ doc.name }} ({{ doc.department.name }})</option>
+      {% endfor %}
+    </select>
+    <label>Start time</label>
+    <input type="datetime-local" name="start_time" required>
+    <label>Duration (minutes)</label>
+    <input type="number" name="duration_minutes" value="30">
+    <button type="submit">Add slot</button>
+  </form>
+</div>
+{% endblock %}

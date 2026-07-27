@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Audit Log — AgentCare{% endblock %}
+{% block content %}
+<h1>Audit Log</h1>
+<div class="card">
+  <table>
+    <tr><th>Time</th><th>Actor</th><th>Action</th><th>Entity</th><th>Metadata</th></tr>
+    {% for e in events %}
+    <tr>
+      <td class="muted">{{ e.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+      <td>{{ e.actor_label }}{% if e.actor_id %} (#{{ e.actor_id }}){% endif %}</td>
+      <td>{{ e.action }}</td>
+      <td>{{ e.entity_type }}{% if e.entity_id %} #{{ e.entity_id }}{% endif %}</td>
+      <td class="muted" style="max-width:280px;overflow:hidden;text-overflow:ellipsis;">{{ e.event_metadata }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}
