@@ -14,10 +14,10 @@ escalated to a human staff member for review.
 
 ```bash
 git clone <this-repo>
-cd agentcare
-python3 -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
-pip install -r requirements.txt
+cd PatientPilot
+uv venv myenv
+myenv\Scripts\activate        # Windows: venv\Scripts\activate
+uv pip install -r requirements.txt
 
 cp .env.example .env
 # edit .env and set GROQ_API_KEY (free key at https://console.groq.com/keys)
